@@ -29,8 +29,8 @@
         <!-- Thêm flex-shrink-0 để khối logo không bị ép nhỏ lại -->
         <div class="logo flex items-center gap-2 cursor-pointer flex-shrink-0">
           <img
-            src="/frontend/assets/images/Logo.jpg"
-            alt="Logo Phòng Khám"
+            src="src/assets/hero.png"
+            alt="Logo"
             class="h-10 w-auto object-contain rounded-md"
           />
           <!-- Thêm whitespace-nowrap để "PhòngKhám+" luôn dính liền 1 dòng -->
@@ -58,9 +58,19 @@
             >Quy trình</a
           >
           <a
+            href="#featured-doctors"
+            class="hover:text-teal-600 transition whitespace-nowrap"
+            >Bác sĩ</a
+          >
+          <a
             href="#blog"
             class="hover:text-teal-600 transition whitespace-nowrap"
             >Góc sức khỏe</a
+          >
+          <a
+            href="#blog"
+            class="hover:text-teal-600 transition whitespace-nowrap"
+            >Lịch hẹn</a
           >
         </nav>
 
@@ -355,6 +365,149 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      <!-- ==================== BÁC SĨ NỔI BẬT ==================== -->
+      <section
+        id="featured-doctors"
+        class="py-12 bg-teal-50 relative overflow-hidden"
+      >
+        <!-- Họa tiết chữ thập trang trí mờ -->
+        <div class="absolute top-8 left-10 w-16 h-16 opacity-50">
+          <div
+            class="absolute top-1/2 left-0 w-full h-4 bg-teal-100 rounded-sm -translate-y-1/2"
+          ></div>
+          <div
+            class="absolute left-1/2 top-0 w-4 h-full bg-teal-100 rounded-sm -translate-x-1/2"
+          ></div>
+        </div>
+        <div class="absolute bottom-8 right-10 w-24 h-24 opacity-50">
+          <div
+            class="absolute top-1/2 left-0 w-full h-6 bg-teal-100 rounded-sm -translate-y-1/2"
+          ></div>
+          <div
+            class="absolute left-1/2 top-0 w-6 h-full bg-teal-100 rounded-sm -translate-x-1/2"
+          ></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+          <!-- Tiêu đề & Nút Xem thêm -->
+          <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-bold text-gray-800">Bác sĩ nổi bật</h2>
+            <a
+              href="#"
+              class="bg-teal-100 text-teal-700 px-6 py-2 rounded-2xl font-semibold hover:bg-teal-200 transition text-sm"
+            >
+              Xem thêm
+            </a>
+          </div>
+
+          <!-- Lưới danh sách bác sĩ -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative"
+          >
+            <!-- Bác sĩ 1 -->
+            <div
+              class="flex flex-col items-center text-center group cursor-pointer px-2"
+            >
+              <div
+                class="w-48 h-48 rounded-full overflow-hidden shadow-sm mb-4 group-hover:shadow-md transition"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                  alt="Bác sĩ Nguyễn Xuân Thành"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <h3
+                class="font-bold text-gray-800 text-sm mb-1 line-clamp-3 px-2"
+              >
+                Thầy thuốc ưu tú, Phó giáo sư, Tiến sĩ, Cố vấn chuyên môn Nguyễn
+                Xuân Thành
+              </h3>
+              <p class="text-gray-500 text-xs mt-1">Bệnh Viêm gan</p>
+            </div>
+
+            <!-- Bác sĩ 2 -->
+            <div
+              class="flex flex-col items-center text-center group cursor-pointer px-2"
+            >
+              <div
+                class="w-48 h-48 rounded-full overflow-hidden shadow-sm mb-4 group-hover:shadow-md transition"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1537368910025-700350fe46c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                  alt="Bác sĩ Võ Văn Mẫn"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <h3
+                class="font-bold text-gray-800 text-sm mb-1 line-clamp-3 px-2"
+              >
+                Bác sĩ Chuyên khoa II Võ<br />Văn Mẫn
+              </h3>
+              <p class="text-gray-500 text-xs mt-1">
+                Cơ Xương Khớp, Chấn thương<br />chỉnh hình
+              </p>
+            </div>
+
+            <!-- Dịch vụ (Khám tiêu hóa) -->
+            <div
+              class="flex flex-col items-center text-center group cursor-pointer px-2"
+            >
+              <div
+                class="w-48 h-48 rounded-full overflow-hidden shadow-sm mb-4 group-hover:shadow-md transition bg-white flex items-center justify-center p-4 relative border-2 border-teal-50"
+              >
+                <div class="text-center z-10">
+                  <span
+                    class="font-bold text-teal-800 block text-base leading-tight"
+                    >KHÁM<br />TIÊU HOÁ</span
+                  >
+                  <span
+                    class="font-bold text-teal-600 block text-lg bg-teal-50 px-2 rounded mt-1"
+                    >200.000đ</span
+                  >
+                </div>
+                <i
+                  class="fas fa-stethoscope absolute -bottom-2 -right-2 text-teal-200 text-6xl opacity-80 transform -rotate-12"
+                ></i>
+              </div>
+              <h3
+                class="font-bold text-gray-800 text-sm mb-1 line-clamp-3 px-2"
+              >
+                Khám Tại Trung Tâm Nội Soi<br />Tiêu Hóa Doctor Check
+              </h3>
+              <p class="text-gray-500 text-xs mt-1">Tiêu hóa</p>
+            </div>
+
+            <!-- Bác sĩ 4 -->
+            <div
+              class="flex flex-col items-center text-center group cursor-pointer px-2"
+            >
+              <div
+                class="w-48 h-48 rounded-full overflow-hidden shadow-sm mb-4 group-hover:shadow-md transition"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                  alt="Bác sĩ Nguyễn Trọng Hưng"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <h3
+                class="font-bold text-gray-800 text-sm mb-1 line-clamp-3 px-2"
+              >
+                PGs.Ts. Bác sĩ Nguyễn Trọng<br />Hưng
+              </h3>
+              <p class="text-gray-500 text-xs mt-1">Sức khỏe tâm thần</p>
+            </div>
+
+            <!-- Nút Next (Slider button overlay) -->
+            <button
+              class="absolute right-0 top-[35%] translate-x-4 bg-white w-10 h-10 border border-teal-100 rounded-lg shadow-md flex items-center justify-center text-teal-600 hover:bg-teal-50 hover:border-teal-300 transition hidden lg:flex z-20"
+            >
+              <i class="fas fa-chevron-right text-sm"></i>
+            </button>
           </div>
         </div>
       </section>

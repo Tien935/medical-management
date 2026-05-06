@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../assets/Logo.png";
 
 const Header = () => {
   const location = useLocation();
@@ -92,7 +93,7 @@ const Header = () => {
           className="logo flex items-center gap-2 cursor-pointer flex-shrink-0"
         >
           <img
-            src="/frontend/assets/images/Logo.jpg"
+            src={Logo}
             alt="Logo"
             className="h-10 w-auto object-contain rounded-md"
           />

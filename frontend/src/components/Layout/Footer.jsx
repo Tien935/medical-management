@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import Tan from "../../assets/Tan.png";
+import Tu from "../../assets/Tu.png";
+import TANTTV from "../../assets/TANTTV.png";
 
 const Footer = () => {
   return (
@@ -98,18 +101,10 @@ const Footer = () => {
               Đối tác
             </h4>
             <div className="flex space-x-3">
+              <img src={Tan} alt="Partner Tan" className="h-8 object-contain" />
+              <img src={Tu} alt="Partner Tu" className="h-8 object-contain" />
               <img
-                src="/frontend/assets/images/Tan.png"
-                alt="Partner Tan"
-                className="h-8 object-contain"
-              />
-              <img
-                src="/frontend/assets/images/Tu.png"
-                alt="Partner Tu"
-                className="h-8 object-contain"
-              />
-              <img
-                src="/frontend/assets/images/TANTTV.png"
+                src={TANTTV}
                 alt="Partner TANTTV"
                 className="h-8 object-contain"
               />

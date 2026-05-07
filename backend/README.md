@@ -1,62 +1,59 @@
-# backend
+# Backend - Medical Management System
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Mã nguồn Backend cho hệ thống Medical Management, được phát triển trên nền tảng Quarkus và Java 21.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## 1. Yêu cầu hệ thống
 
-## Running the application in dev mode
+- **Java Development Kit (JDK) 21**
+- **MySQL Server** đang chạy (mặc định ở cổng `3306`)
+- Cài đặt Maven (tùy chọn, có thể dùng `mvnw` đi kèm dự án)
 
-You can run your application in dev mode that enables live coding using:
+## 2. Cấu hình Database
 
-```shell script
-./mvnw quarkus:dev
+1. Tạo database MySQL bằng lệnh sau:
+   ```sql
+   CREATE DATABASE medical_db;
+   ```
+
+2. Thông tin kết nối mặc định được cấu hình trong `src/main/resources/application.properties`:
+   - **Tên đăng nhập:** `root`
+   - **Mật khẩu:** `123456`
+
+*Lưu ý: Bạn không cần tạo bảng thủ công. Ứng dụng sử dụng Hibernate để tự động tạo và cập nhật cấu trúc bảng khi khởi chạy.*
+
+## 3. Hướng dẫn chạy ứng dụng
+
+### Chạy ở chế độ Development
+Chế độ này hỗ trợ tự động reload khi source code thay đổi.
+Mở Command Prompt/PowerShell tại thư mục `backend` và chạy lệnh:
+
+```cmd
+mvnw.cmd quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+- Quarkus Dev UI: [http://localhost:8080/q/dev/](http://localhost:8080/q/dev/)
 
-## Packaging and running the application
+### Chạy ở môi trường Production (Đóng gói ứng dụng)
+1. Build ứng dụng:
+   ```cmd
+   mvnw.cmd package
+   ```
+2. Chạy ứng dụng từ file `.jar` đã build:
+   ```cmd
+   java -jar target/quarkus-app/quarkus-run.jar
+   ```
 
-The application can be packaged using:
+## 4. Thông tin kết nối API
 
-```shell script
-./mvnw package
+- **Base URL:** `http://localhost:8080/api`
+- Ứng dụng đã được cấu hình sẵn CORS cho phép các domain Frontend gọi trực tiếp API.
+
+## 5. Cấu trúc thư mục
+
+```text
+backend/
+ ├── src/main/java/             # Mã nguồn Java (Controllers, Services, Repositories...)
+ ├── src/main/resources/        # File cấu hình (application.properties)
+ ├── target/                    # Thư mục chứa file sinh ra sau khi Build
+ └── pom.xml                    # Cấu hình thư viện Maven
 ```
-
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/backend-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)

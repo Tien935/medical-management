@@ -18,13 +18,14 @@ const MyAppointments = () => {
         const data = await response.json();
         // The backend returns an array of Appointment objects
         // We need to map them to the format the UI expects, or adjust the UI.
-        const mappedData = data.map(apt => ({
+          const mappedData = data.map(apt => ({
           id: apt.id,
           doctor: apt.doctor ? apt.doctor.name : 'Chưa phân bổ',
           specialty: (apt.doctor && apt.doctor.specialty) ? apt.doctor.specialty.name : 'N/A',
           date: apt.date,
           time: apt.time,
           status: getStatusLabel(apt.status),
+          rawStatus: apt.status,
           color: getStatusColor(apt.status)
         }));
         setAppointments(mappedData);
@@ -42,6 +43,7 @@ const MyAppointments = () => {
       case 'CONFIRMED': return 'Sắp tới';
       case 'COMPLETED': return 'Đã khám';
       case 'CANCELLED': return 'Đã hủy';
+      case 'CANCEL_REQUESTED': return 'Yêu cầu hủy';
       default: return status || 'Chờ xác nhận';
     }
   };
@@ -52,24 +54,45 @@ const MyAppointments = () => {
       case 'CONFIRMED': return 'text-blue-600 bg-blue-50';
       case 'COMPLETED': return 'text-green-600 bg-green-50';
       case 'CANCELLED': return 'text-red-600 bg-red-50';
+      case 'CANCEL_REQUESTED': return 'text-orange-600 bg-orange-50';
       default: return 'text-slate-600 bg-slate-50';
     }
   };
 
-  const handleCancel = async (id) => {
-    if (window.confirm(`Bạn có chắc chắn muốn hủy lịch hẹn ${id} không?`)) {
-      try {
-        const response = await fetch(`http://localhost:8080/api/appointments/${id}`, {
-          method: 'DELETE'
-        });
-        if (response.ok) {
-          setAppointments(prev => prev.filter(apt => apt.id !== id));
-          alert('Đã hủy lịch hẹn thành công.');
-        } else {
-          alert('Lỗi khi hủy lịch hẹn.');
+  const handleCancel = async (id, status) => {
+    if (status === 'CONFIRMED') {
+      if (window.confirm(`Bạn có chắc muốn gửi yêu cầu hủy lịch hẹn ${id} tới Admin không?`)) {
+        try {
+          const response = await fetch(`http://localhost:8080/api/appointments/${id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'CANCEL_REQUESTED' })
+          });
+          if (response.ok) {
+            fetchAppointments();
+            alert('Đã gửi yêu cầu hủy lịch. Vui lòng chờ Admin xác nhận.');
+          } else {
+            alert('Lỗi khi gửi yêu cầu hủy.');
+          }
+        } catch (error) {
+          alert('Lỗi kết nối máy chủ.');
         }
-      } catch (error) {
-        alert('Lỗi kết nối máy chủ.');
+      }
+    } else {
+      if (window.confirm(`Bạn có chắc chắn muốn hủy lịch hẹn ${id} không?`)) {
+        try {
+          const response = await fetch(`http://localhost:8080/api/appointments/${id}`, {
+            method: 'DELETE'
+          });
+          if (response.ok) {
+            setAppointments(prev => prev.filter(apt => apt.id !== id));
+            alert('Đã hủy lịch hẹn thành công.');
+          } else {
+            alert('Lỗi khi hủy lịch hẹn.');
+          }
+        } catch (error) {
+          alert('Lỗi kết nối máy chủ.');
+        }
       }
     }
   };
@@ -152,13 +175,15 @@ const MyAppointments = () => {
                       </span>
                     </td>
                     <td className="px-8 py-6 text-right">
-                      <button 
-                        onClick={() => handleCancel(apt.id)}
-                        className="w-10 h-10 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition"
-                        title="Hủy lịch"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
+                      {(apt.rawStatus === 'PENDING' || apt.rawStatus === 'CONFIRMED') && (
+                        <button 
+                          onClick={() => handleCancel(apt.id, apt.rawStatus)}
+                          className="w-10 h-10 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition"
+                          title={apt.rawStatus === 'CONFIRMED' ? "Yêu cầu hủy" : "Hủy lịch"}
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))

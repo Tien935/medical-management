@@ -26,7 +26,11 @@ const LoginPage = () => {
         const userData = await response.json();
         // Save user data (excluding password if returned)
         localStorage.setItem("user", JSON.stringify(userData));
-        window.location.href = "/";
+        if (userData.role === 'ADMIN') {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/";
+        }
       } else {
         const errData = await response.text();
         setError(errData || "Tên đăng nhập hoặc mật khẩu không đúng.");

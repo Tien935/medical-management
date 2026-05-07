@@ -10,23 +10,48 @@ import ProfilePage from './pages/ProfilePage';
 import DoctorsPage from './pages/DoctorsPage';
 import ScrollToTop from './components/ScrollToTop';
 
+// Admin Components
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminLayout from './layouts/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageAppointments from './pages/admin/ManageAppointments';
+import ManageDoctors from './pages/admin/ManageDoctors';
+
 function App() {
   return (
     <Router>
       <ScrollToTop />
-      <MainLayout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/appointments" element={<MyAppointments />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/doctors" element={<DoctorsPage />} />
-          {/* Fallback route */}
-          <Route path="*" element={<HomePage />} />
-        </Routes>
-      </MainLayout>
+      <Routes>
+        {/* Admin Routes */}
+        <Route path="/admin/*" element={
+          <ProtectedRoute requiredRole="ADMIN">
+            <AdminLayout>
+              <Routes>
+                <Route path="/" element={<AdminDashboard />} />
+                <Route path="/appointments" element={<ManageAppointments />} />
+                <Route path="/doctors" element={<ManageDoctors />} />
+              </Routes>
+            </AdminLayout>
+          </ProtectedRoute>
+        } />
+
+        {/* Public Routes */}
+        <Route path="/*" element={
+          <MainLayout>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/booking" element={<BookingPage />} />
+              <Route path="/appointments" element={<MyAppointments />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/doctors" element={<DoctorsPage />} />
+              {/* Fallback route */}
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </MainLayout>
+        } />
+      </Routes>
     </Router>
   );
 }

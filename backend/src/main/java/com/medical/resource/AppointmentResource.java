@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -56,5 +57,19 @@ public class AppointmentResource {
             return Response.noContent().build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @PUT
+    @Path("/{id}/status")
+    @Transactional
+    public Response updateStatus(@PathParam("id") String id, Appointment updatedAppointment) {
+        Appointment appointment = Appointment.findById(id);
+        if (appointment == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (updatedAppointment.status != null) {
+            appointment.status = updatedAppointment.status;
+        }
+        return Response.ok(appointment).build();
     }
 }

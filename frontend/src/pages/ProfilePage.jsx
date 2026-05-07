@@ -19,12 +19,12 @@ const ProfilePage = () => {
       setUser(parsedUser);
       setFormData({
         ...formData,
-        fullName: parsedUser.name || '',
+        fullName: parsedUser.fullName || parsedUser.username || '',
         email: parsedUser.email || '',
-        phone: '0901234567',
-        dob: '1990-01-01',
-        gender: 'Nam',
-        address: 'Số 298 Đ. Cầu Diễn, Hà Nội'
+        phone: parsedUser.phone || '',
+        dob: parsedUser.dob || '',
+        gender: parsedUser.gender || '',
+        address: parsedUser.address || ''
       });
     }
   }, []);
@@ -37,7 +37,15 @@ const ProfilePage = () => {
     e.preventDefault();
     setIsEditing(false);
     // Cập nhật localStorage hoặc gọi API
-    const updatedUser = { ...user, name: formData.fullName };
+    const updatedUser = { 
+      ...user, 
+      fullName: formData.fullName,
+      phone: formData.phone,
+      email: formData.email,
+      dob: formData.dob,
+      gender: formData.gender,
+      address: formData.address
+    };
     localStorage.setItem('user', JSON.stringify(updatedUser));
     setUser(updatedUser);
     alert('Đã cập nhật hồ sơ thành công!');

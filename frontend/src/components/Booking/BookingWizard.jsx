@@ -74,9 +74,51 @@ const BookingWizard = () => {
         />;
       case 4:
         return <PatientInfoStep 
-          onSubmit={(info) => {
+          onSubmit={async (info) => {
             updateData('patientInfo', info);
-            setStep(5); // Success step
+            
+            try {
+              // Get current user if logged in
+              const userStr = localStorage.getItem('user');
+              const user = userStr ? JSON.parse(userStr) : null;
+              const patientId = user ? user.id : null; // If null, backend should handle or require login
+
+              if (!user) {
+                alert("Vui lòng đăng nhập để đặt lịch.");
+                window.location.href = "/login";
+                return;
+              }
+
+              const payload = {
+                patient: { id: patientId },
+                doctor: { id: bookingData.doctor?.id },
+                date: bookingData.date,
+                time: bookingData.time,
+                patientName: info.name,
+                phone: info.phone,
+                reason: info.reason,
+                status: 'PENDING'
+              };
+
+              const response = await fetch("http://localhost:8080/api/appointments", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+              });
+
+              if (response.ok) {
+                const savedApt = await response.json();
+                updateData('appointmentId', savedApt.id);
+                setStep(5); // Success step
+              } else {
+                alert("Đã xảy ra lỗi khi đặt lịch. Vui lòng thử lại.");
+              }
+            } catch (error) {
+              console.error("Booking error:", error);
+              alert("Lỗi kết nối máy chủ.");
+            }
           }}
           onBack={prevStep}
         />;
@@ -88,13 +130,13 @@ const BookingWizard = () => {
             </div>
             <h2 className="text-3xl font-bold text-slate-800 mb-4">Đặt lịch thành công!</h2>
             <p className="text-slate-600 mb-8 px-8">
-              Cảm ơn bạn <strong>{bookingData.patientInfo.name}</strong>. Mã lịch hẹn của bạn là <span className="font-mono font-bold text-teal-600">PK-{Math.floor(Math.random() * 10000)}</span>. Chúng tôi sẽ liên hệ với bạn sớm nhất có thể.
+              Cảm ơn bạn <strong>{bookingData.patientInfo.name}</strong>. Mã lịch hẹn của bạn là <span className="font-mono font-bold text-teal-600">{bookingData.appointmentId || 'PK-xxxx'}</span>. Chúng tôi sẽ liên hệ với bạn sớm nhất có thể.
             </p>
             <button 
-              onClick={() => window.location.reload()}
+              onClick={() => window.location.href = "/appointments"}
               className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full transition shadow-lg"
             >
-              Về trang chủ
+              Xem lịch hẹn của tôi
             </button>
           </div>
         );

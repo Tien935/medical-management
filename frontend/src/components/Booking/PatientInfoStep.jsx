@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
 const PatientInfoStep = ({ onSubmit, onBack }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    reason: ''
+  const [formData, setFormData] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    const user = savedUser ? JSON.parse(savedUser) : null;
+    return {
+      name: user?.fullName || user?.username || '',
+      phone: user?.phone || '',
+      email: user?.email || '',
+      reason: ''
+    };
   });
 
   const handleChange = (e) => {

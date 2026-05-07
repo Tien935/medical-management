@@ -1,17 +1,76 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MyAppointments = () => {
-  const [filter, setFilter] = React.useState({ search: '', status: 'Tất cả' });
-  const [appointments, setAppointments] = React.useState([
-    { id: 'PK-8241', doctor: 'BS. Nguyễn Văn An', specialty: 'Nội tổng quát', date: '2026-05-10', time: '09:00', status: 'Sắp tới', color: 'text-blue-600 bg-blue-50' },
-    { id: 'PK-1290', doctor: 'ThS.BS. Trần Thị Bình', specialty: 'Nhi khoa', date: '2026-05-15', time: '14:30', status: 'Chờ xác nhận', color: 'text-amber-600 bg-amber-50' },
-    { id: 'PK-0552', doctor: 'BSCKII. Lê Văn Cường', specialty: 'Tim mạch', date: '2026-04-20', time: '10:00', status: 'Đã khám', color: 'text-green-600 bg-green-50' },
-  ]);
+  const [filter, setFilter] = useState({ search: '', status: 'Tất cả' });
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleCancel = (id) => {
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  const fetchAppointments = async () => {
+    setLoading(true);
+    try {
+      // In a real app, you would pass the logged in user ID to filter
+      const response = await fetch("http://localhost:8080/api/appointments");
+      if (response.ok) {
+        const data = await response.json();
+        // The backend returns an array of Appointment objects
+        // We need to map them to the format the UI expects, or adjust the UI.
+        const mappedData = data.map(apt => ({
+          id: apt.id,
+          doctor: apt.doctor ? apt.doctor.name : 'Chưa phân bổ',
+          specialty: (apt.doctor && apt.doctor.specialty) ? apt.doctor.specialty.name : 'N/A',
+          date: apt.date,
+          time: apt.time,
+          status: getStatusLabel(apt.status),
+          color: getStatusColor(apt.status)
+        }));
+        setAppointments(mappedData);
+      }
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    switch(status) {
+      case 'PENDING': return 'Chờ xác nhận';
+      case 'CONFIRMED': return 'Sắp tới';
+      case 'COMPLETED': return 'Đã khám';
+      case 'CANCELLED': return 'Đã hủy';
+      default: return status || 'Chờ xác nhận';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'PENDING': return 'text-amber-600 bg-amber-50';
+      case 'CONFIRMED': return 'text-blue-600 bg-blue-50';
+      case 'COMPLETED': return 'text-green-600 bg-green-50';
+      case 'CANCELLED': return 'text-red-600 bg-red-50';
+      default: return 'text-slate-600 bg-slate-50';
+    }
+  };
+
+  const handleCancel = async (id) => {
     if (window.confirm(`Bạn có chắc chắn muốn hủy lịch hẹn ${id} không?`)) {
-      setAppointments(prev => prev.filter(apt => apt.id !== id));
-      alert('Đã hủy lịch hẹn thành công.');
+      try {
+        const response = await fetch(`http://localhost:8080/api/appointments/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          setAppointments(prev => prev.filter(apt => apt.id !== id));
+          alert('Đã hủy lịch hẹn thành công.');
+        } else {
+          alert('Lỗi khi hủy lịch hẹn.');
+        }
+      } catch (error) {
+        alert('Lỗi kết nối máy chủ.');
+      }
     }
   };
 
@@ -68,7 +127,14 @@ const MyAppointments = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {filteredAppointments.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="px-8 py-20 text-center text-slate-400 font-bold">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto mb-4"></div>
+                    Đang tải dữ liệu...
+                  </td>
+                </tr>
+              ) : filteredAppointments.length > 0 ? (
                 filteredAppointments.map((apt) => (
                   <tr key={apt.id} className="hover:bg-slate-50/50 transition">
                     <td className="px-8 py-6 font-mono font-bold text-teal-600">{apt.id}</td>
@@ -114,7 +180,10 @@ const MyAppointments = () => {
           <h3 className="text-2xl font-black mb-2">Bạn cần khám mới?</h3>
           <p className="text-teal-50 opacity-80 max-w-md">Tiếp tục chăm sóc sức khỏe của bạn bằng cách đặt một cuộc hẹn mới ngay hôm nay.</p>
         </div>
-        <button className="relative z-10 bg-white text-teal-600 font-black py-4 px-10 rounded-2xl hover:bg-teal-50 transition shadow-xl">
+        <button 
+          onClick={() => window.location.href = "/doctors"}
+          className="relative z-10 bg-white text-teal-600 font-black py-4 px-10 rounded-2xl hover:bg-teal-50 transition shadow-xl"
+        >
           Đặt lịch mới
         </button>
       </div>

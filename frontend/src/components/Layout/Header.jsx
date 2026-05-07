@@ -113,13 +113,13 @@ const Header = () => {
             Trang chủ
           </Link>
           <a
-            href="#services"
+            href="/#services"
             className={`hover:text-teal-600 transition whitespace-nowrap ${isActive("/", "#services") ? "text-teal-600" : ""}`}
           >
             Dịch vụ
           </a>
           <a
-            href="#process"
+            href="/#process"
             className={`hover:text-teal-600 transition whitespace-nowrap ${isActive("/", "#process") ? "text-teal-600" : ""}`}
           >
             Quy trình
@@ -194,10 +194,10 @@ const Header = () => {
           {user ? (
             <div className="flex items-center gap-3 bg-gray-50 p-1.5 pr-4 rounded-full border border-gray-100 hover:shadow-md transition cursor-pointer group relative">
               <div className="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold text-sm">
-                {user.name.charAt(0)}
+                {(user.fullName || user.username || "U").charAt(0).toUpperCase()}
               </div>
               <span className="text-sm font-bold text-gray-700 group-hover:text-teal-600 transition truncate max-w-[100px]">
-                {user.name}
+                {user.fullName || user.username}
               </span>
 
               {/* Dropdown menu giả lập */}

@@ -26,7 +26,7 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/admin/stats');
+      const response = await fetch('http://localhost:8081/api/admin/stats');
       if (response.ok) {
         const data = await response.json();
         setStats(data);

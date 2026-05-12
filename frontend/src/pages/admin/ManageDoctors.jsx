@@ -22,7 +22,7 @@ const ManageDoctors = () => {
   const fetchDoctors = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/doctors');
+      const response = await fetch('http://localhost:8081/api/doctors');
       if (response.ok) {
         const data = await response.json();
         setDoctors(data);
@@ -37,7 +37,7 @@ const ManageDoctors = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc muốn xóa bác sĩ này?")) {
       try {
-        const response = await fetch(`http://localhost:8080/api/doctors/${id}`, { method: 'DELETE' });
+        const response = await fetch(`http://localhost:8081/api/doctors/${id}`, { method: 'DELETE' });
         if (response.ok) {
           fetchDoctors();
         } else {
@@ -73,8 +73,8 @@ const ManageDoctors = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = editingDoctor 
-      ? `http://localhost:8080/api/doctors/${editingDoctor.id}` 
-      : `http://localhost:8080/api/doctors`;
+      ? `http://localhost:8081/api/doctors/${editingDoctor.id}` 
+      : `http://localhost:8081/api/doctors`;
     const method = editingDoctor ? 'PUT' : 'POST';
 
     // Xây dựng payload an toàn

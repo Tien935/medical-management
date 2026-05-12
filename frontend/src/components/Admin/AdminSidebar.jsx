@@ -10,6 +10,8 @@ const AdminSidebar = () => {
     { name: 'Tổng quan', path: '/admin', icon: 'fas fa-chart-pie' },
     { name: 'Lịch hẹn', path: '/admin/appointments', icon: 'fas fa-calendar-check' },
     { name: 'Bác sĩ', path: '/admin/doctors', icon: 'fas fa-user-md' },
+    { name: 'Chuyên khoa', path: '/admin/specialties', icon: 'fas fa-stethoscope' },
+    { name: 'Người dùng', path: '/admin/users', icon: 'fas fa-users-cog' },
   ];
 
   return (

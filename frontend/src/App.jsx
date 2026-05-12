@@ -16,6 +16,14 @@ import AdminLayout from './layouts/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageAppointments from './pages/admin/ManageAppointments';
 import ManageDoctors from './pages/admin/ManageDoctors';
+import ManageSpecialties from './pages/admin/ManageSpecialties';
+import ManageUsers from './pages/admin/ManageUsers';
+
+// Doctor Components
+import DoctorLayout from './layouts/DoctorLayout';
+import DoctorDashboard from './pages/doctor/DoctorDashboard';
+import MedicalRecordForm from './pages/doctor/MedicalRecordForm';
+
 
 function App() {
   return (
@@ -30,8 +38,23 @@ function App() {
                 <Route path="/" element={<AdminDashboard />} />
                 <Route path="/appointments" element={<ManageAppointments />} />
                 <Route path="/doctors" element={<ManageDoctors />} />
+                <Route path="/specialties" element={<ManageSpecialties />} />
+                <Route path="/users" element={<ManageUsers />} />
+
               </Routes>
             </AdminLayout>
+          </ProtectedRoute>
+        } />
+
+        {/* Doctor Routes */}
+        <Route path="/doctor/*" element={
+          <ProtectedRoute requiredRole="DOCTOR">
+            <DoctorLayout>
+              <Routes>
+                <Route path="/" element={<DoctorDashboard />} />
+                <Route path="/examine/:appointmentId" element={<MedicalRecordForm />} />
+              </Routes>
+            </DoctorLayout>
           </ProtectedRoute>
         } />
 

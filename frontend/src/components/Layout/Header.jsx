@@ -210,6 +210,24 @@ const Header = () => {
                   của tôi
                 </Link>
 
+                {user.role === 'DOCTOR' && (
+                  <Link
+                    to="/doctor"
+                    className="block px-5 py-3 text-sm text-gray-700 hover:bg-teal-50 font-semibold"
+                  >
+                    <i className="fas fa-stethoscope mr-2 text-teal-600"></i> Portal Bác sĩ
+                  </Link>
+                )}
+                
+                {user.role === 'ADMIN' && (
+                  <Link
+                    to="/admin"
+                    className="block px-5 py-3 text-sm text-gray-700 hover:bg-teal-50 font-semibold"
+                  >
+                    <i className="fas fa-cog mr-2 text-teal-600"></i> Quản trị viên
+                  </Link>
+                )}
+
                 <div className="border-t border-gray-50"></div>
                 <button
                   onClick={handleLogout}

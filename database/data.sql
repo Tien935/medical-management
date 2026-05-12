@@ -1,25 +1,29 @@
 -- Seed specialties
-INSERT INTO specialties (name, description, image_url) VALUES 
-('Nội tổng quát', 'Chăm sóc sức khỏe toàn diện cho người lớn', 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80'),
-('Nhi khoa', 'Chăm sóc sức khỏe cho trẻ em', 'https://images.unsplash.com/photo-1584825282472-b673030ca3fa?auto=format&fit=crop&w=800&q=80'),
-('Tim mạch', 'Chuyên khoa về tim và mạch máu', 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?auto=format&fit=crop&w=800&q=80'),
-('Sản phụ khoa', 'Sức khỏe phụ nữ và thai sản', 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80'),
-('Da liễu', 'Điều trị các bệnh về da', 'https://images.unsplash.com/photo-1510832198440-a52376950479?auto=format&fit=crop&w=800&q=80'),
-('Răng Hàm Mặt', 'Chăm sóc sức khỏe răng miệng', 'https://images.unsplash.com/photo-1445510861639-5651173bc5d5?auto=format&fit=crop&w=800&q=80');
+INSERT INTO specialties (id, name, description, image_url) VALUES 
+(1, 'Nội tổng quát', 'Chăm sóc sức khỏe toàn diện cho người lớn', 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80'),
+(2, 'Nhi khoa', 'Chăm sóc sức khỏe cho trẻ em', 'https://images.unsplash.com/photo-1584825282472-b673030ca3fa?auto=format&fit=crop&w=800&q=80'),
+(3, 'Tim mạch', 'Chuyên khoa về tim và mạch máu', 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?auto=format&fit=crop&w=800&q=80'),
+(4, 'Sản phụ khoa', 'Sức khỏe phụ nữ và thai sản', 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80'),
+(5, 'Da liễu', 'Điều trị các bệnh về da', 'https://images.unsplash.com/photo-1510832198440-a52376950479?auto=format&fit=crop&w=800&q=80'),
+(6, 'Răng Hàm Mặt', 'Chăm sóc sức khỏe răng miệng', 'https://images.unsplash.com/photo-1445510861639-5651173bc5d5?auto=format&fit=crop&w=800&q=80'),
+(7, 'Tai mũi họng', 'Điều trị các bệnh lý về tai, mũi, họng', 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80'),
+(8, 'Cơ xương khớp', 'Chuyên khoa về cơ, xương, và khớp', 'https://images.unsplash.com/photo-1559508551-44bff1de756b?auto=format&fit=crop&w=800&q=80');
 
 -- Seed doctors
-INSERT INTO doctors (name, specialty_id, degree, experience, image_url, description) VALUES 
-('BS. Nguyễn Văn An', 1, 'Thạc sĩ, Bác sĩ', '15 năm kinh nghiệm', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b1a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia nội tổng quát với nhiều năm kinh nghiệm tại các bệnh viện lớn.'),
-('ThS.BS. Trần Thị Bình', 2, 'Thạc sĩ', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Yêu trẻ và tận tâm với công việc chăm sóc sức khỏe nhi nhi.'),
-('BSCKII. Lê Văn Cường', 3, 'Bác sĩ chuyên khoa II', '20 năm kinh nghiệm', 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia tim mạch hàng đầu, đã thực hiện nhiều ca phẫu thuật phức tạp.'),
-('BS. Phạm Minh Đức', 4, 'Bác sĩ chuyên khoa I', '12 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên khoa sản phụ khoa, đồng hành cùng mẹ bầu trong suốt thai kỳ.'),
-('BS. Hoàng Thu Hà', 5, 'Bác sĩ', '8 năm kinh nghiệm', 'https://images.unsplash.com/photo-1559839734-2b71f15367ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên điều trị các bệnh lý về da và thẩm mỹ nội khoa.'),
-('ThS.BS. Đỗ Kim Liên', 6, 'Thạc sĩ', '18 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622902046580-2b47f47f0871?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Nhiều kinh nghiệm trong lĩnh vực phục hình răng và phẫu thuật hàm mặt.');
+INSERT INTO doctors (id, name, specialty_id, degree, experience, image_url, description, user_id) VALUES 
+(1, 'BS. Nguyễn Văn An', 1, 'Thạc sĩ, Bác sĩ', '15 năm kinh nghiệm', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b1a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia nội tổng quát với nhiều năm kinh nghiệm tại các bệnh viện lớn.', 2),
+(2, 'ThS.BS. Trần Thị Bình', 2, 'Thạc sĩ', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Yêu trẻ và tận tâm với công việc chăm sóc sức khỏe nhi nhi.', NULL),
+(3, 'BSCKII. Lê Văn Cường', 3, 'Bác sĩ chuyên khoa II', '20 năm kinh nghiệm', 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia tim mạch hàng đầu, đã thực hiện nhiều ca phẫu thuật phức tạp.', NULL),
+(4, 'BS. Phạm Minh Đức', 4, 'Bác sĩ chuyên khoa I', '12 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên khoa sản phụ khoa, đồng hành cùng mẹ bầu trong suốt thai kỳ.', NULL),
+(5, 'BS. Hoàng Thu Hà', 5, 'Bác sĩ', '8 năm kinh nghiệm', 'https://images.unsplash.com/photo-1559839734-2b71f15367ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên điều trị các bệnh lý về da và thẩm mỹ nội khoa.', NULL),
+(6, 'ThS.BS. Đỗ Kim Liên', 6, 'Thạc sĩ', '18 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622902046580-2b47f47f0871?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Nhiều kinh nghiệm trong lĩnh vực phục hình răng và phẫu thuật hàm mặt.', NULL),
+(7, 'BS. Phan Thị Ngọc', 7, 'Bác sĩ chuyên khoa I', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1559839734-2b71f15367ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia tai mũi họng với nhiều năm kinh nghiệm.', NULL),
+(8, 'BSCKII. Trần Văn Nam', 8, 'Bác sĩ chuyên khoa II', '22 năm kinh nghiệm', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b1a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia cơ xương khớp hàng đầu tại Việt Nam.', NULL);
 
 -- Seed users (password is 'password' hashed - for demo purposes we can use plain or typical hashed)
-INSERT INTO users (username, password, full_name, email, phone, role) VALUES 
-('patient1', 'password123', 'Nguyễn Văn A', 'patient1@example.com', '0123456789', 'PATIENT'),
-('doctor_an', 'password123', 'BS. Nguyễn Văn An', 'an.nv@medical.com', '0987654321', 'DOCTOR');
+INSERT INTO users (id, username, password, full_name, email, phone, role) VALUES 
+(1, 'patient1', 'password123', 'Nguyễn Văn A', 'patient1@example.com', '0123456789', 'PATIENT'),
+(2, 'doctor_an', 'password123', 'BS. Nguyễn Văn An', 'an.nv@medical.com', '0987654321', 'DOCTOR');
 
 -- Seed appointments
 INSERT INTO appointments (id, patient_id, doctor_id, appointment_date, appointment_time, status) VALUES 

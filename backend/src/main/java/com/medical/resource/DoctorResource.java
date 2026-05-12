@@ -37,6 +37,17 @@ public class DoctorResource {
         return Doctor.findById(id);
     }
 
+    @GET
+    @Path("/user/{userId}")
+    @Transactional
+    public jakarta.ws.rs.core.Response getByUserId(@PathParam("userId") Long userId) {
+        Doctor doctor = Doctor.find("user.id", userId).firstResult();
+        if (doctor != null) {
+            return jakarta.ws.rs.core.Response.ok(doctor).build();
+        }
+        return jakarta.ws.rs.core.Response.status(jakarta.ws.rs.core.Response.Status.NOT_FOUND).build();
+    }
+
     @POST
     @Transactional
     public jakarta.ws.rs.core.Response create(Doctor doctor) {

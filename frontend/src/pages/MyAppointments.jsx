@@ -13,7 +13,7 @@ const MyAppointments = () => {
     setLoading(true);
     try {
       // In a real app, you would pass the logged in user ID to filter
-      const response = await fetch("http://localhost:8080/api/appointments");
+      const response = await fetch("http://localhost:8081/api/appointments");
       if (response.ok) {
         const data = await response.json();
         // The backend returns an array of Appointment objects
@@ -63,7 +63,7 @@ const MyAppointments = () => {
     if (status === 'CONFIRMED') {
       if (window.confirm(`Bạn có chắc muốn gửi yêu cầu hủy lịch hẹn ${id} tới Admin không?`)) {
         try {
-          const response = await fetch(`http://localhost:8080/api/appointments/${id}/status`, {
+          const response = await fetch(`http://localhost:8081/api/appointments/${id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'CANCEL_REQUESTED' })
@@ -81,7 +81,7 @@ const MyAppointments = () => {
     } else {
       if (window.confirm(`Bạn có chắc chắn muốn hủy lịch hẹn ${id} không?`)) {
         try {
-          const response = await fetch(`http://localhost:8080/api/appointments/${id}`, {
+          const response = await fetch(`http://localhost:8081/api/appointments/${id}`, {
             method: 'DELETE'
           });
           if (response.ok) {

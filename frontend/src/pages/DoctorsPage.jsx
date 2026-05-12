@@ -26,7 +26,7 @@ const DoctorsPage = () => {
   const fetchDoctors = async () => {
     setLoading(true);
     try {
-      let url = `http://localhost:8080/api/doctors`;
+      let url = `http://localhost:8081/api/doctors`;
       if (selectedSpecialty !== "Tất cả") {
         url += `?specialty=${encodeURIComponent(selectedSpecialty)}`;
       }

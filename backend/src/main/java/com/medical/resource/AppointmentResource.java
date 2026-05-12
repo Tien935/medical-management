@@ -26,13 +26,19 @@ public class AppointmentResource {
         return Appointment.listAll();
     }
 
+    @GET
+    @Path("/doctor/{doctorId}")
+    public List<Appointment> getByDoctor(@PathParam("doctorId") Long doctorId) {
+        return Appointment.list("doctor.id = ?1 order by date desc, time desc", doctorId);
+    }
+
     @POST
     @Transactional
     public Response create(Appointment appointment) {
         if (appointment.id == null) {
             appointment.id = "PK-" + (1000 + new Random().nextInt(9000));
         }
-        
+
         // Ensure patient and doctor exist (basic check)
         if (appointment.doctor != null && appointment.doctor.id != null) {
             appointment.doctor = Doctor.findById(appointment.doctor.id);

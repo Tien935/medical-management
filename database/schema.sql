@@ -1,7 +1,7 @@
 -- Create specialties table
 CREATE TABLE specialties (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name NVARCHAR(100) NOT NULL,
     description TEXT,
     image_url TEXT
 );
@@ -9,10 +9,10 @@ CREATE TABLE specialties (
 -- Create doctors table
 CREATE TABLE doctors (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name NVARCHAR(100) NOT NULL,
     specialty_id INT,
-    degree VARCHAR(100),
-    experience VARCHAR(100),
+    degree NVARCHAR(100),
+    experience NVARCHAR(100),
     image_url TEXT,
     description TEXT,
     FOREIGN KEY (specialty_id) REFERENCES specialties(id)
@@ -21,23 +21,23 @@ CREATE TABLE doctors (
 -- Create users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    full_name VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    phone VARCHAR(20),
+    username NVARCHAR(50) UNIQUE NOT NULL,
+    password NVARCHAR(255) NOT NULL,
+    full_name NVARCHAR(100),
+    email NVARCHAR(100) UNIQUE,
+    phone NVARCHAR(20),
     avatar_url TEXT,
-    role VARCHAR(20) DEFAULT 'PATIENT'
+    role NVARCHAR(20) DEFAULT 'PATIENT'
 );
 
 -- Create appointments table
 CREATE TABLE appointments (
-    id VARCHAR(20) PRIMARY KEY, -- Format PK-XXXX
+    id NVARCHAR(20) PRIMARY KEY, -- Format PK-XXXX
     patient_id INT,
     doctor_id INT,
     appointment_date DATE NOT NULL,
     appointment_time TIME NOT NULL,
-    status VARCHAR(50) DEFAULT 'Sắp tới',
+    status NVARCHAR(50) DEFAULT 'Sắp tới',
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (patient_id) REFERENCES users(id),

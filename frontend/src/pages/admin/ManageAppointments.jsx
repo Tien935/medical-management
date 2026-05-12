@@ -11,7 +11,7 @@ const ManageAppointments = () => {
   const fetchAppointments = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/appointments');
+      const response = await fetch('http://localhost:8081/api/appointments');
       if (response.ok) {
         const data = await response.json();
         setAppointments(data);
@@ -25,7 +25,7 @@ const ManageAppointments = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/appointments/${id}/status`, {
+      const response = await fetch(`http://localhost:8081/api/appointments/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })

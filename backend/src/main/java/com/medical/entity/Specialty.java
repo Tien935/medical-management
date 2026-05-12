@@ -9,5 +9,7 @@ import jakarta.persistence.Table;
 public class Specialty extends PanacheEntity {
     public String name;
     public String description;
+    
+    @jakarta.persistence.Column(name = "image_url")
     public String imageUrl;
 }

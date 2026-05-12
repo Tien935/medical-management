@@ -1,7 +1,19 @@
 -- Seed specialties
+SELECT * FROM users;
+SELECT * FROM doctors;
+
+ALTER TABLE doctors AUTO_INCREMENT = 1;
+ALTER TABLE doctors MODIFY COLUMN description TEXT;
+
+
+
+DELETE FROM appointments;
+DELETE FROM specialties;
+DELETE FROM doctors;
+
 INSERT INTO specialties (id, name, description, image_url) VALUES 
 (1, 'Nội tổng quát', 'Chăm sóc sức khỏe toàn diện cho người lớn', 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80'),
-(2, 'Nhi khoa', 'Chăm sóc sức khỏe cho trẻ em', 'https://images.unsplash.com/photo-1584825282472-b673030ca3fa?auto=format&fit=crop&w=800&q=80'),
+(2, 'Nhi khoa', 'Chăm sóc sức khỏe cho trẻ em', '	https://bacsinhi.vn/wp-content/uploads/2022/05/logo-1.jpg'),
 (3, 'Tim mạch', 'Chuyên khoa về tim và mạch máu', 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?auto=format&fit=crop&w=800&q=80'),
 (4, 'Sản phụ khoa', 'Sức khỏe phụ nữ và thai sản', 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80'),
 (5, 'Da liễu', 'Điều trị các bệnh về da', 'https://images.unsplash.com/photo-1510832198440-a52376950479?auto=format&fit=crop&w=800&q=80'),
@@ -11,14 +23,14 @@ INSERT INTO specialties (id, name, description, image_url) VALUES
 
 -- Seed doctors
 INSERT INTO doctors (id, name, specialty_id, degree, experience, image_url, description, user_id) VALUES 
-(1, 'BS. Nguyễn Văn An', 1, 'Thạc sĩ, Bác sĩ', '15 năm kinh nghiệm', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b1a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia nội tổng quát với nhiều năm kinh nghiệm tại các bệnh viện lớn.', 2),
-(2, 'ThS.BS. Trần Thị Bình', 2, 'Thạc sĩ', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Yêu trẻ và tận tâm với công việc chăm sóc sức khỏe nhi nhi.', NULL),
-(3, 'BSCKII. Lê Văn Cường', 3, 'Bác sĩ chuyên khoa II', '20 năm kinh nghiệm', 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia tim mạch hàng đầu, đã thực hiện nhiều ca phẫu thuật phức tạp.', NULL),
-(4, 'BS. Phạm Minh Đức', 4, 'Bác sĩ chuyên khoa I', '12 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên khoa sản phụ khoa, đồng hành cùng mẹ bầu trong suốt thai kỳ.', NULL),
-(5, 'BS. Hoàng Thu Hà', 5, 'Bác sĩ', '8 năm kinh nghiệm', 'https://images.unsplash.com/photo-1559839734-2b71f15367ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên điều trị các bệnh lý về da và thẩm mỹ nội khoa.', NULL),
-(6, 'ThS.BS. Đỗ Kim Liên', 6, 'Thạc sĩ', '18 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622902046580-2b47f47f0871?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Nhiều kinh nghiệm trong lĩnh vực phục hình răng và phẫu thuật hàm mặt.', NULL),
-(7, 'BS. Phan Thị Ngọc', 7, 'Bác sĩ chuyên khoa I', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1559839734-2b71f15367ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia tai mũi họng với nhiều năm kinh nghiệm.', NULL),
-(8, 'BSCKII. Trần Văn Nam', 8, 'Bác sĩ chuyên khoa II', '22 năm kinh nghiệm', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b1a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'Chuyên gia cơ xương khớp hàng đầu tại Việt Nam.', NULL);
+(1, 'BS. Nguyễn Văn An', 1, 'Thạc sĩ, Bác sĩ', '15 năm kinh nghiệm', '	https://hthaostudio.com/wp-content/uploads/2022/03/Anh-bac-si-nam-7-min.jpg.webp', 'Với hơn 15 năm kinh nghiệm trong lĩnh vực Nội khoa, Bác sĩ An không chỉ nổi tiếng bởi chuyên môn vững vàng mà còn bởi sự tận tâm, luôn lắng nghe và thấu hiểu từng nỗi lo của bệnh nhân. Ông từng công tác tại các bệnh viện tuyến đầu và sở hữu nhiều công trình nghiên cứu về điều trị bệnh lý mãn tính.', 2),
+(2, 'ThS.BS. Trần Thị Bình', 2, 'Thạc sĩ', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=800&q=80', 'Thạc sĩ, Bác sĩ Trần Thị Bình là chuyên gia hàng đầu trong lĩnh vực Nhi khoa. Với tình yêu thương trẻ nhỏ và sự kiên nhẫn tuyệt vời, bác sĩ luôn mang đến cảm giác an tâm cho cả bé và phụ huynh. Phương châm của bác sĩ là "Chăm sóc trẻ bằng cả trái tim", ưu tiên các phương pháp điều trị hạn chế kháng sinh.', NULL),
+(3, 'BSCKII. Lê Văn Cường', 3, 'Bác sĩ chuyên khoa II', '20 năm kinh nghiệm', 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=800&q=80', 'Bác sĩ Lê Văn Cường là đôi tay vàng trong lĩnh vực Tim mạch với hàng ngàn ca can thiệp thành công. Ông có khả năng chẩn đoán chính xác các bệnh lý phức tạp và luôn cập nhật những công nghệ điều trị tiên tiến nhất thế giới. Sự điềm tĩnh và quyết đoán của ông là chỗ dựa tinh thần vững chắc cho mọi bệnh nhân.', NULL),
+(4, 'BS. Phạm Minh Đức', 4, 'Bác sĩ chuyên khoa I', '12 năm kinh nghiệm', 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=800&q=80', 'Đồng hành cùng hàng ngàn mẹ bầu trong hành trình vượt cạn, Bác sĩ Phạm Minh Đức được yêu mến bởi sự nhẹ nhàng và kiến thức chuyên sâu về sản phụ khoa. Bác sĩ luôn chú trọng việc tư vấn tâm lý và dinh dưỡng, giúp các mẹ có một thai kỳ khỏe mạnh và hạnh phúc nhất.', NULL),
+(5, 'BS. Hoàng Thu Hà', 5, 'Bác sĩ', '8 năm kinh nghiệm', 'https://hthaostudio.com/wp-content/uploads/2022/08/Anh-profile-bac-si-min.jpg.webp', 'Bác sĩ Hoàng Thu Hà là chuyên gia trong việc điều trị các bệnh lý da liễu và thẩm mỹ nội khoa. Với con mắt thẩm mỹ tinh tế, bác sĩ giúp bệnh nhân không chỉ khỏi bệnh mà còn lấy lại sự tự tin với làn da khỏe đẹp. Cô thường xuyên tham gia các hội thảo quốc tế để cập nhật xu hướng làm đẹp an toàn.', NULL),
+(6, 'ThS.BS. Đỗ Kim Liên', 6, 'Thạc sĩ', '18 năm kinh nghiệm', 'https://hthaostudio.com/wp-content/uploads/2022/08/Anh-profile-bac-si-min.jpg.webp', 'Thạc sĩ Đỗ Kim Liên chuyên sâu về phục hình răng sứ và phẫu thuật hàm mặt. Với sự tỉ mỉ trong từng thao tác, bác sĩ luôn cam kết mang lại nụ cười rạng rỡ và chức năng ăn nhai hoàn hảo nhất cho bệnh nhân. Sự hài lòng của khách hàng là thước đo thành công lớn nhất của cô.', NULL),
+(7, 'BS. Phan Thị Ngọc', 7, 'Bác sĩ chuyên khoa I', '10 năm kinh nghiệm', 'https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=800&q=80', 'Với kinh nghiệm phong phú trong việc điều trị các bệnh lý phức tạp về Tai Mũi Họng, Bác sĩ Ngọc luôn được bệnh nhân tin tưởng nhờ phương pháp chẩn đoán chính xác và sự nhẹ nhàng trong thăm khám. Cô đặc biệt có thế mạnh trong các thủ thuật nội soi hiện đại, giúp giảm thiểu đau đớn cho người bệnh.', NULL),
+(8, 'BSCKII. Trần Văn Nam', 8, 'Bác sĩ chuyên khoa II', '22 năm kinh nghiệm', 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=800&q=80', 'Bác sĩ Trần Văn Nam là chuyên gia đầu ngành về Cơ Xương Khớp với hơn 22 năm cống hiến cho y học. Ông chuyên điều trị các bệnh lý thoái hóa và chấn thương thể thao bằng các phương pháp bảo tồn tiên tiến. Sự tận tâm và quy trình khám chữa bệnh bài bản của ông đã giúp hàng ngàn bệnh nhân tìm lại sự linh hoạt.', NULL);
 
 -- Seed users (password is 'password' hashed - for demo purposes we can use plain or typical hashed)
 INSERT INTO users (id, username, password, full_name, email, phone, role) VALUES 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const DoctorsPage = () => {
   const navigate = useNavigate();
@@ -113,7 +113,10 @@ const DoctorsPage = () => {
                   key={doctor.id}
                   className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group flex flex-col"
                 >
-                  <div className="h-72 overflow-hidden relative">
+                  <Link 
+                    to={`/doctors/${doctor.id}`}
+                    className="h-72 overflow-hidden relative block"
+                  >
                     <img
                       src={doctor.imageUrl}
                       alt={doctor.name}
@@ -124,14 +127,16 @@ const DoctorsPage = () => {
                         {doctor.specialty?.name}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                   <div className="p-8 flex-grow">
                     <p className="text-gray-400 font-black text-xs uppercase tracking-widest mb-2">
                       {doctor.degree}
                     </p>
-                    <h3 className="text-2xl font-black text-gray-900 mb-4 group-hover:text-teal-600 transition">
-                      {doctor.name}
-                    </h3>
+                    <Link to={`/doctors/${doctor.id}`}>
+                      <h3 className="text-2xl font-black text-gray-900 mb-4 hover:text-teal-600 transition">
+                        {doctor.name}
+                      </h3>
+                    </Link>
                     <div className="space-y-3 mb-8">
                       <p className="text-gray-500 flex items-center text-sm font-semibold">
                         <i className="fas fa-award text-teal-500 mr-3 w-4"></i>{" "}
@@ -142,12 +147,20 @@ const DoctorsPage = () => {
                         Lịch khám: Thứ 2 - Thứ 7
                       </p>
                     </div>
-                    <button
-                      onClick={() => handleBooking(doctor)}
-                      className="w-full bg-teal-50 text-teal-600 font-black py-4 rounded-2xl hover:bg-teal-600 hover:text-white transition-all transform group-hover:scale-[1.02] shadow-sm shadow-teal-100"
-                    >
-                      ĐẶT LỊCH NGAY
-                    </button>
+                    <div className="flex gap-4">
+                       <Link 
+                        to={`/doctors/${doctor.id}`}
+                        className="flex-1 bg-white text-slate-900 border-2 border-slate-100 font-black py-4 rounded-2xl hover:bg-slate-50 transition-all text-center text-xs uppercase tracking-widest flex items-center justify-center"
+                      >
+                        HỒ SƠ
+                      </Link>
+                      <button
+                        onClick={() => handleBooking(doctor)}
+                        className="flex-[2] bg-teal-600 text-white font-black py-4 rounded-2xl hover:bg-teal-700 transition-all shadow-lg shadow-teal-100 text-xs uppercase tracking-widest"
+                      >
+                        ĐẶT LỊCH
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))

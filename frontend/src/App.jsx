@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import DoctorsPage from './pages/DoctorsPage';
+import DoctorDetailPage from './pages/DoctorDetailPage';
 import ScrollToTop from './components/ScrollToTop';
 
 // Admin Components
@@ -69,6 +70,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/doctors" element={<DoctorsPage />} />
+              <Route path="/doctors/:id" element={<DoctorDetailPage />} />
               {/* Fallback route */}
               <Route path="*" element={<HomePage />} />
             </Routes>

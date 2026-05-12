@@ -19,6 +19,11 @@ import ManageDoctors from './pages/admin/ManageDoctors';
 import ManageSpecialties from './pages/admin/ManageSpecialties';
 import ManageUsers from './pages/admin/ManageUsers';
 
+// Doctor Components
+import DoctorLayout from './layouts/DoctorLayout';
+import DoctorDashboard from './pages/doctor/DoctorDashboard';
+import MedicalRecordForm from './pages/doctor/MedicalRecordForm';
+
 
 function App() {
   return (
@@ -38,6 +43,18 @@ function App() {
 
               </Routes>
             </AdminLayout>
+          </ProtectedRoute>
+        } />
+
+        {/* Doctor Routes */}
+        <Route path="/doctor/*" element={
+          <ProtectedRoute requiredRole="DOCTOR">
+            <DoctorLayout>
+              <Routes>
+                <Route path="/" element={<DoctorDashboard />} />
+                <Route path="/examine/:appointmentId" element={<MedicalRecordForm />} />
+              </Routes>
+            </DoctorLayout>
           </ProtectedRoute>
         } />
 

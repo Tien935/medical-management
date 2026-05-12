@@ -93,11 +93,9 @@ const BookingWizard = () => {
                 patient: { id: patientId },
                 doctor: { id: bookingData.doctor?.id },
                 date: bookingData.date,
-                time: bookingData.time,
-                patientName: info.name,
-                phone: info.phone,
-                reason: info.reason,
-                status: 'PENDING'
+                time: bookingData.time + ':00', // Ensure HH:mm:ss format for LocalTime
+                notes: `Bệnh nhân: ${info.name}\nSĐT: ${info.phone}\nLý do: ${info.reason}`,
+                status: 'Chờ xác nhận'
               };
 
               const response = await fetch("http://localhost:8081/api/appointments", {

@@ -18,7 +18,7 @@ import ManageAppointments from './pages/admin/ManageAppointments';
 import ManageDoctors from './pages/admin/ManageDoctors';
 import ManageSpecialties from './pages/admin/ManageSpecialties';
 import ManageUsers from './pages/admin/ManageUsers';
-
+import ManagePatients from './pages/admin/ManagePatients';
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
                 <Route path="/doctors" element={<ManageDoctors />} />
                 <Route path="/specialties" element={<ManageSpecialties />} />
                 <Route path="/users" element={<ManageUsers />} />
-
+                <Route path="/patients" element={<ManagePatients />} />
               </Routes>
             </AdminLayout>
           </ProtectedRoute>

@@ -10,6 +10,7 @@ const AdminSidebar = () => {
     { name: 'Tổng quan', path: '/admin', icon: 'fas fa-chart-pie' },
     { name: 'Lịch hẹn', path: '/admin/appointments', icon: 'fas fa-calendar-check' },
     { name: 'Bác sĩ', path: '/admin/doctors', icon: 'fas fa-user-md' },
+    { name: 'Bệnh nhân', path: '/admin/patients', icon: 'fas fa-user-injured' },
     { name: 'Chuyên khoa', path: '/admin/specialties', icon: 'fas fa-stethoscope' },
     { name: 'Người dùng', path: '/admin/users', icon: 'fas fa-users-cog' },
   ];
@@ -43,8 +44,15 @@ const AdminSidebar = () => {
         ))}
       </nav>
 
-      <div className="p-6">
-        <div className="bg-slate-800 rounded-xl p-4 flex items-center justify-center gap-2 text-slate-400 text-sm">
+      <div className="p-6 space-y-3">
+        <Link 
+          to="/" 
+          className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-teal-600 py-3 rounded-xl transition-all duration-300 text-sm font-bold border border-slate-700"
+        >
+          <i className="fas fa-external-link-alt text-xs"></i>
+          <span>Xem trang chủ</span>
+        </Link>
+        <div className="bg-slate-800/50 rounded-xl p-4 flex items-center justify-center gap-2 text-slate-500 text-xs">
           <i className="fas fa-shield-alt"></i>
           <span>V.1.0 Secured</span>
         </div>

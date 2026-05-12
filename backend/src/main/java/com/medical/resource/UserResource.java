@@ -38,6 +38,11 @@ public class UserResource {
         entity.email = updated.email;
         entity.phone = updated.phone;
         entity.role = updated.role;
+        
+        if (updated.password != null && !updated.password.trim().isEmpty()) {
+            entity.password = updated.password;
+        }
+        
         if (updated.avatarUrl != null) {
             entity.avatarUrl = updated.avatarUrl;
         }

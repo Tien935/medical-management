@@ -26,6 +26,12 @@ public class AppointmentResource {
         return Appointment.listAll();
     }
 
+    @GET
+    @Path("/patient/{patientId}")
+    public List<Appointment> getByPatientId(@PathParam("patientId") Long patientId) {
+        return Appointment.list("patient.id", patientId);
+    }
+
     @POST
     @Transactional
     public Response create(Appointment appointment) {

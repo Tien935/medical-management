@@ -12,7 +12,9 @@ const ManageDoctors = () => {
     degree: '',
     experience: '',
     imageUrl: '',
-    description: ''
+    description: '',
+    username: '',
+    password: ''
   });
 
   useEffect(() => {
@@ -57,7 +59,9 @@ const ManageDoctors = () => {
       degree: doctor.degree,
       experience: doctor.experience,
       imageUrl: doctor.imageUrl,
-      description: doctor.description
+      description: doctor.description,
+      username: '', // Do not edit user credentials here for simplicity
+      password: ''
     });
     setShowModal(true);
   };
@@ -65,7 +69,7 @@ const ManageDoctors = () => {
   const handleAddNew = () => {
     setEditingDoctor(null);
     setFormData({
-      name: '', specialtyId: '', degree: '', experience: '', imageUrl: '', description: ''
+      name: '', specialtyId: '', degree: '', experience: '', imageUrl: '', description: '', username: '', password: ''
     });
     setShowModal(true);
   };
@@ -84,7 +88,13 @@ const ManageDoctors = () => {
       experience: formData.experience,
       imageUrl: formData.imageUrl,
       description: formData.description,
-      specialty: formData.specialtyId ? { id: formData.specialtyId } : null
+      specialty: formData.specialtyId ? { id: formData.specialtyId } : null,
+      ...(editingDoctor ? {} : {
+        user: {
+          username: formData.username,
+          password: formData.password
+        }
+      })
     };
 
     try {
@@ -98,7 +108,11 @@ const ManageDoctors = () => {
         fetchDoctors();
         alert(editingDoctor ? "Cập nhật thành công" : "Thêm mới thành công");
       } else {
-        alert("Có lỗi xảy ra");
+        if (response.status === 409) {
+          alert("Tên đăng nhập đã tồn tại!");
+        } else {
+          alert("Có lỗi xảy ra");
+        }
       }
     } catch (error) {
       alert("Lỗi kết nối máy chủ");
@@ -217,6 +231,24 @@ const ManageDoctors = () => {
                   <label className="block text-sm font-bold text-slate-600 mb-1">Mô tả chi tiết</label>
                   <textarea rows="3" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none resize-none" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
                 </div>
+
+                {!editingDoctor && (
+                  <>
+                    <div className="border-t border-slate-100 pt-4 mt-4">
+                      <h4 className="font-bold text-slate-800 mb-4">Tài khoản đăng nhập</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-bold text-slate-600 mb-1">Tên đăng nhập *</label>
+                          <input required type="text" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none" value={formData.username} onChange={e => setFormData({...formData, username: e.target.value})} />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-bold text-slate-600 mb-1">Mật khẩu *</label>
+                          <input required type="password" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </form>
             </div>
             

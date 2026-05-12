@@ -95,7 +95,7 @@ const BookingWizard = () => {
                 date: bookingData.date,
                 time: bookingData.time + ':00', // Ensure HH:mm:ss format for LocalTime
                 notes: `Bệnh nhân: ${info.name}\nSĐT: ${info.phone}\nLý do: ${info.reason}`,
-                status: 'Chờ xác nhận'
+                status: 'PENDING'
               };
 
               const response = await fetch("http://localhost:8081/api/appointments", {

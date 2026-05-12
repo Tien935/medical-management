@@ -39,7 +39,8 @@ const MyAppointments = () => {
 
   const getStatusLabel = (status) => {
     switch(status) {
-      case 'PENDING': return 'Chờ xác nhận';
+      case 'PENDING': 
+      case 'Chờ xác nhận': return 'Chờ xác nhận';
       case 'CONFIRMED': return 'Sắp tới';
       case 'COMPLETED': return 'Đã khám';
       case 'CANCELLED': return 'Đã hủy';
@@ -50,7 +51,8 @@ const MyAppointments = () => {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'PENDING': return 'text-amber-600 bg-amber-50';
+      case 'PENDING': 
+      case 'Chờ xác nhận': return 'text-amber-600 bg-amber-50';
       case 'CONFIRMED': return 'text-blue-600 bg-blue-50';
       case 'COMPLETED': return 'text-green-600 bg-green-50';
       case 'CANCELLED': return 'text-red-600 bg-red-50';
@@ -175,7 +177,7 @@ const MyAppointments = () => {
                       </span>
                     </td>
                     <td className="px-8 py-6 text-right">
-                      {(apt.rawStatus === 'PENDING' || apt.rawStatus === 'CONFIRMED') && (
+                      {(apt.rawStatus === 'PENDING' || apt.rawStatus === 'Chờ xác nhận' || apt.rawStatus === 'CONFIRMED') && (
                         <button 
                           onClick={() => handleCancel(apt.id, apt.rawStatus)}
                           className="w-10 h-10 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition"

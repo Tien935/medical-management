@@ -51,6 +51,21 @@ public class DoctorResource {
     @POST
     @Transactional
     public jakarta.ws.rs.core.Response create(Doctor doctor) {
+        if (doctor.user != null) {
+            if (doctor.user.id != null) {
+                doctor.user = com.medical.entity.User.findById(doctor.user.id);
+            } else {
+                if (doctor.user.username != null && com.medical.entity.User.find("username", doctor.user.username).count() > 0) {
+                    return jakarta.ws.rs.core.Response.status(jakarta.ws.rs.core.Response.Status.CONFLICT).entity("{\"message\": \"Tên đăng nhập đã tồn tại\"}").build();
+                }
+                doctor.user.role = "DOCTOR";
+                if (doctor.user.fullName == null || doctor.user.fullName.isEmpty()) {
+                    doctor.user.fullName = doctor.name;
+                }
+                doctor.user.persist();
+            }
+        }
+
         if (doctor.specialty != null && doctor.specialty.id != null) {
             doctor.specialty = com.medical.entity.Specialty.findById(doctor.specialty.id);
         }

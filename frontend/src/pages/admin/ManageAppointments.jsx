@@ -42,7 +42,8 @@ const ManageAppointments = () => {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'PENDING': return 'text-amber-600 bg-amber-50 border-amber-200';
+      case 'PENDING': 
+      case 'Chờ xác nhận': return 'text-amber-600 bg-amber-50 border-amber-200';
       case 'CONFIRMED': return 'text-blue-600 bg-blue-50 border-blue-200';
       case 'COMPLETED': return 'text-green-600 bg-green-50 border-green-200';
       case 'CANCELLED': return 'text-red-600 bg-red-50 border-red-200';
@@ -99,7 +100,7 @@ const ManageAppointments = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {apt.status === 'PENDING' && (
+                      {(apt.status === 'PENDING' || apt.status === 'Chờ xác nhận') && (
                         <>
                           <button onClick={() => updateStatus(apt.id, 'CONFIRMED')} className="p-2 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition mr-2" title="Xác nhận">
                             <i className="fas fa-check"></i>

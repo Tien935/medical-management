@@ -43,21 +43,6 @@ const ManagePatients = () => {
     }
   };
 
-  const handleDeletePatient = async (id) => {
-    if (window.confirm("Bạn có chắc muốn xóa bệnh nhân này?")) {
-      try {
-        const response = await fetch(`http://localhost:8081/api/users/${id}`, { method: 'DELETE' });
-        if (response.ok) {
-          fetchPatients();
-        } else {
-          alert("Xóa thất bại! Có thể do bệnh nhân đang có lịch hẹn.");
-        }
-      } catch (error) {
-        alert("Lỗi kết nối máy chủ");
-      }
-    }
-  };
-
   const openAddPatientForm = () => {
     setEditingPatient(null);
     setPatientFormData({
@@ -89,8 +74,14 @@ const ManagePatients = () => {
     try {
       let url = 'http://localhost:8081/api/auth/register';
       let method = 'POST';
+      
+      let payload = { ...patientFormData };
 
-      if (editingPatient) {
+      if (!editingPatient) {
+        // Auto-generate username and password for new patients
+        payload.username = payload.phone || payload.email.split('@')[0] || `bn_${Date.now()}`;
+        payload.password = '123456'; // Default password
+      } else {
         url = `http://localhost:8081/api/users/${editingPatient.id}`;
         method = 'PUT';
       }
@@ -98,7 +89,7 @@ const ManagePatients = () => {
       const response = await fetch(url, {
         method: method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patientFormData)
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -234,17 +225,10 @@ const ManagePatients = () => {
                         </button>
                         <button 
                           onClick={() => openEditPatientForm(patient)} 
-                          className="w-10 h-10 rounded-xl bg-slate-50 text-slate-600 hover:bg-blue-600 hover:text-white transition shadow-sm inline-flex items-center justify-center mr-2"
+                          className="w-10 h-10 rounded-xl bg-slate-50 text-slate-600 hover:bg-blue-600 hover:text-white transition shadow-sm inline-flex items-center justify-center"
                           title="Sửa thông tin"
                         >
                           <i className="fas fa-user-edit"></i>
-                        </button>
-                        <button 
-                          onClick={() => handleDeletePatient(patient.id)} 
-                          className="w-10 h-10 rounded-xl bg-slate-50 text-slate-600 hover:bg-red-600 hover:text-white transition shadow-sm inline-flex items-center justify-center"
-                          title="Xóa bệnh nhân"
-                        >
-                          <i className="fas fa-trash"></i>
                         </button>
                       </td>
                     </tr>
@@ -409,24 +393,7 @@ const ManagePatients = () => {
             </div>
             
             <form onSubmit={handlePatientSubmit} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                {!editingPatient ? (
-                  <div>
-                    <label className="block text-sm font-bold text-slate-600 mb-1">Tên đăng nhập *</label>
-                    <input required type="text" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none" value={patientFormData.username} onChange={e => setPatientFormData({...patientFormData, username: e.target.value})} />
-                  </div>
-                ) : (
-                  <div>
-                    <label className="block text-sm font-bold text-slate-600 mb-1">Tên đăng nhập</label>
-                    <input type="text" disabled className="w-full p-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 outline-none cursor-not-allowed" value={patientFormData.username} />
-                  </div>
-                )}
-                <div>
-                  <label className="block text-sm font-bold text-slate-600 mb-1">{editingPatient ? 'Mật khẩu mới (Tùy chọn)' : 'Mật khẩu *'}</label>
-                  <input required={!editingPatient} type="text" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none" placeholder={editingPatient ? "Bỏ trống nếu không đổi" : ""} value={patientFormData.password} onChange={e => setPatientFormData({...patientFormData, password: e.target.value})} />
-                </div>
-              </div>
-
+              {/* Username and Password fields have been removed as requested. They are auto-generated. */}
               <div>
                 <label className="block text-sm font-bold text-slate-600 mb-1">Họ và tên *</label>
                 <input required type="text" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none placeholder-slate-300" placeholder="Nguyễn Văn A" value={patientFormData.fullName} onChange={e => setPatientFormData({...patientFormData, fullName: e.target.value})} />

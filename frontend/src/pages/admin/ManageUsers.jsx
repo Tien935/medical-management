@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('ALL');
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   
@@ -78,17 +80,46 @@ const ManageUsers = () => {
     }
   };
 
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          user.email?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          user.phone?.includes(searchTerm) ||
+                          user.username?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === 'ALL' || user.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
+
   return (
     <div className="space-y-6 animate-fadeIn">
-      <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex justify-between items-center">
+      <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-2xl font-black text-slate-800">Quản lý Người dùng</h2>
           <p className="text-slate-500 font-semibold mt-1">Danh sách bệnh nhân và nhân viên hệ thống</p>
         </div>
-        <div className="flex gap-2">
-           <div className="bg-blue-50 text-blue-600 px-4 py-2 rounded-2xl font-bold text-sm">
-             Tổng: {users.length}
-           </div>
+        <div className="flex gap-4 w-full md:w-auto">
+          <div className="relative w-full md:w-64">
+            <input 
+              type="text" 
+              placeholder="Tìm kiếm người dùng..." 
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-teal-500 transition-colors"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+          <select 
+            className="px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-teal-500 bg-white font-semibold text-slate-600"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+          >
+            <option value="ALL">Tất cả vai trò</option>
+            <option value="ADMIN">Quản trị (ADMIN)</option>
+            <option value="DOCTOR">Bác sĩ (DOCTOR)</option>
+            <option value="PATIENT">Bệnh nhân (PATIENT)</option>
+          </select>
+          <div className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center h-full border border-blue-100">
+            Tổng: {filteredUsers.length}
+          </div>
         </div>
       </div>
 
@@ -109,43 +140,51 @@ const ManageUsers = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {users.map(user => (
-                  <tr key={user.id} className="hover:bg-slate-50 transition group">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xl overflow-hidden">
-                          {user.avatarUrl ? (
-                            <img src={user.avatarUrl} className="w-full h-full object-cover" alt="" />
-                          ) : user.fullName.charAt(0)}
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map(user => (
+                    <tr key={user.id} className="hover:bg-slate-50 transition group">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xl overflow-hidden">
+                            {user.avatarUrl ? (
+                              <img src={user.avatarUrl} className="w-full h-full object-cover" alt="" />
+                            ) : user.fullName?.charAt(0) || 'U'}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-800">{user.fullName || 'Chưa cập nhật'}</p>
+                            <p className="text-xs font-bold text-slate-400">@{user.username}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-bold text-slate-800">{user.fullName}</p>
-                          <p className="text-xs font-bold text-slate-400">@{user.username}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-slate-600">
-                      <div><i className="far fa-envelope mr-2 text-teal-500"></i> {user.email}</div>
-                      <div className="mt-1"><i className="fas fa-phone-alt mr-2 text-teal-500"></i> {user.phone}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
-                        user.role === 'ADMIN' ? 'bg-purple-100 text-purple-600' : 
-                        user.role === 'DOCTOR' ? 'bg-blue-100 text-blue-600' : 'bg-teal-100 text-teal-600'
-                      }`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button onClick={() => handleEdit(user)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-teal-600 hover:text-white transition shadow-sm">
-                        <i className="fas fa-user-edit"></i>
-                      </button>
-                      <button onClick={() => handleDelete(user.id)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-red-600 hover:text-white transition ml-2 shadow-sm">
-                        <i className="fas fa-trash"></i>
-                      </button>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-slate-600">
+                        <div><i className="far fa-envelope mr-2 text-teal-500"></i> {user.email || 'N/A'}</div>
+                        <div className="mt-1"><i className="fas fa-phone-alt mr-2 text-teal-500"></i> {user.phone || 'N/A'}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
+                          user.role === 'ADMIN' ? 'bg-purple-100 text-purple-600' : 
+                          user.role === 'DOCTOR' ? 'bg-blue-100 text-blue-600' : 'bg-teal-100 text-teal-600'
+                        }`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button onClick={() => handleEdit(user)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-teal-600 hover:text-white transition shadow-sm">
+                          <i className="fas fa-user-edit"></i>
+                        </button>
+                        <button onClick={() => handleDelete(user.id)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-red-600 hover:text-white transition ml-2 shadow-sm">
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="px-6 py-12 text-center text-slate-500 font-semibold">
+                      Không tìm thấy người dùng nào phù hợp.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

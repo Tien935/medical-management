@@ -41,6 +41,10 @@ public class UserResource {
         if (updated.avatarUrl != null) {
             entity.avatarUrl = updated.avatarUrl;
         }
+        
+        if (updated.password != null && !updated.password.trim().isEmpty()) {
+            entity.password = updated.password;
+        }
         return Response.ok(entity).build();
     }
 

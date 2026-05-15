@@ -141,15 +141,23 @@ const DoctorDashboard = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {app.status !== "COMPLETED" &&
-                        app.status !== "Đã khám" && (
-                          <button
-                            onClick={() => handleExamine(app)}
-                            className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
-                          >
-                            Khám bệnh
-                          </button>
-                        )}
+                      {(app.status === "CONFIRMED" || app.status === "Sắp tới") && (
+                        <button
+                          onClick={() => handleExamine(app)}
+                          className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
+                        >
+                          Khám bệnh
+                        </button>
+                      )}
+                      {(app.status === "PENDING" || app.status === "Chờ xác nhận") && (
+                        <button
+                          disabled
+                          className="px-4 py-2 bg-gray-300 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed shadow-sm"
+                          title="Vui lòng chờ Admin xác nhận lịch hẹn này"
+                        >
+                          Chờ duyệt
+                        </button>
+                      )}
                       {(app.status === "COMPLETED" ||
                         app.status === "Đã khám") && (
                         <button

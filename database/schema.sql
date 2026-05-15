@@ -15,7 +15,9 @@ CREATE TABLE doctors (
     experience NVARCHAR(100),
     image_url TEXT,
     description TEXT,
-    FOREIGN KEY (specialty_id) REFERENCES specialties(id)
+    user_id INT,
+    FOREIGN KEY (specialty_id) REFERENCES specialties(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Create users table

@@ -23,6 +23,10 @@ const ManagePatients = () => {
   const [appointments, setAppointments] = useState([]);
   const [loadingAppointments, setLoadingAppointments] = useState(false);
   const [activeTab, setActiveTab] = useState("upcoming"); // 'upcoming' or 'history'
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [showRecordModal, setShowRecordModal] = useState(false);
+  const [loadingRecord, setLoadingRecord] = useState(false);
+
 
   useEffect(() => {
     fetchPatients();
@@ -135,6 +139,27 @@ const ManagePatients = () => {
     }
   };
 
+  const handleViewRecord = async (appointmentId) => {
+    setLoadingRecord(true);
+    setShowRecordModal(true);
+    try {
+      const response = await fetch(
+        `http://localhost:8081/api/medical-records/appointment/${appointmentId}`,
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedRecord(data);
+      } else {
+        setSelectedRecord(null);
+      }
+    } catch (error) {
+      console.error("Error fetching medical record:", error);
+      setSelectedRecord(null);
+    } finally {
+      setLoadingRecord(false);
+    }
+  };
+
   const getStatusLabel = (status) => {
     switch(status) {
       case 'PENDING': 
@@ -159,6 +184,7 @@ const ManagePatients = () => {
       patient.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.phone?.includes(searchTerm) ||
+      patient.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       formatPatientId(patient.id)
         .toLowerCase()
         .includes(searchTerm.toLowerCase()),
@@ -188,8 +214,9 @@ const ManagePatients = () => {
             <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
           </div>
           <div className="bg-teal-50 text-teal-600 px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center h-full border border-teal-100">
-            Tổng: {patients.length}
+            Tổng: {filteredPatients.length}
           </div>
+
           <button
             onClick={openAddPatientForm}
             className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center gap-2 transition shadow-sm h-full"
@@ -472,15 +499,14 @@ const ManagePatients = () => {
                                   {app.doctor?.name}
                                 </span>
                               </div>
-                              {(app.status === "Đã khám" || app.status === "COMPLETED") && app.notes && (
-                                <div className="bg-teal-50/50 p-4 rounded-xl border border-teal-100/50">
-                                  <h5 className="text-xs font-black text-teal-800 uppercase tracking-wider mb-2 flex items-center gap-2">
-                                    <i className="fas fa-notes-medical"></i> Kết
-                                    luận / Ghi chú
-                                  </h5>
-                                  <p className="text-sm text-slate-700 leading-relaxed">
-                                    {app.notes}
-                                  </p>
+                              {(app.status === "Đã khám" || app.status === "COMPLETED") && (
+                                <div className="mt-4 flex justify-end">
+                                  <button 
+                                    onClick={() => handleViewRecord(app.id)}
+                                    className="px-4 py-2 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white transition font-bold text-xs uppercase tracking-wider flex items-center gap-2"
+                                  >
+                                    <i className="fas fa-file-medical"></i> Xem kết quả khám
+                                  </button>
                                 </div>
                               )}
                             </div>
@@ -501,6 +527,113 @@ const ManagePatients = () => {
           </div>
         </div>
       )}
+
+      {/* Medical Record Modal */}
+      {showRecordModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-slideUp">
+            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <div>
+                <h3 className="text-2xl font-black text-slate-900">Chi tiết kết quả khám</h3>
+                <p className="text-slate-500 font-semibold text-sm mt-1">Mã lịch hẹn: {selectedRecord?.appointment?.id}</p>
+              </div>
+              <button 
+                onClick={() => setShowRecordModal(false)}
+                className="w-12 h-12 rounded-full bg-white text-slate-400 hover:text-slate-600 shadow-sm flex items-center justify-center transition"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+            </div>
+            
+            <div className="p-8 max-h-[70vh] overflow-y-auto">
+              {loadingRecord ? (
+                <div className="py-20 text-center">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600 mx-auto mb-4"></div>
+                  <p className="text-slate-500 font-bold">Đang tải kết quả...</p>
+                </div>
+              ) : selectedRecord ? (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-2 gap-6 p-6 bg-teal-50 rounded-3xl border border-teal-100">
+                    <div>
+                      <p className="text-xs font-black text-teal-600 uppercase tracking-widest mb-1">Bác sĩ phụ trách</p>
+                      <p className="font-bold text-slate-900">{selectedRecord.doctor?.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-black text-teal-600 uppercase tracking-widest mb-1">Ngày khám</p>
+                      <p className="font-bold text-slate-900">
+                        {new Date(selectedRecord.examinationDate).toLocaleDateString('vi-VN', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <section>
+                      <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                        <i className="fas fa-stethoscope mr-2 text-teal-500"></i> Triệu chứng & Bệnh sử
+                      </h4>
+                      <p className="text-slate-700 bg-slate-50 p-5 rounded-2xl border border-slate-100 font-medium leading-relaxed">
+                        {selectedRecord.symptoms}
+                      </p>
+                    </section>
+
+                    <section>
+                      <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                        <i className="fas fa-file-medical mr-2 text-teal-500"></i> Chẩn đoán
+                      </h4>
+                      <p className="text-slate-900 bg-blue-50/50 p-5 rounded-2xl border border-blue-100 font-bold text-lg leading-relaxed">
+                        {selectedRecord.diagnosis}
+                      </p>
+                    </section>
+
+                    <section>
+                      <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                        <i className="fas fa-pills mr-2 text-teal-500"></i> Đơn thuốc & Điều trị
+                      </h4>
+                      <div className="text-slate-700 bg-amber-50/30 p-5 rounded-2xl border border-amber-100 font-medium whitespace-pre-line leading-relaxed">
+                        {selectedRecord.prescription}
+                      </div>
+                    </section>
+
+                    {selectedRecord.notes && (
+                      <section>
+                        <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                          <i className="fas fa-comment-medical mr-2 text-teal-500"></i> Ghi chú & Dặn dò
+                        </h4>
+                        <p className="text-slate-600 italic bg-slate-50 p-5 rounded-2xl border border-slate-100 font-medium leading-relaxed">
+                          {selectedRecord.notes}
+                        </p>
+                      </section>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="py-20 text-center">
+                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i className="fas fa-file-invoice text-slate-200 text-3xl"></i>
+                  </div>
+                  <p className="text-slate-500 font-bold">Chưa có kết quả chi tiết cho lịch hẹn này.</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-8 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+              <button 
+                onClick={() => setShowRecordModal(false)}
+                className="px-8 py-3 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition shadow-lg"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Patient Add/Edit Form Modal */}
       {showPatientForm && (

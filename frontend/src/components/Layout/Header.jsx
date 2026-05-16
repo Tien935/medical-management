@@ -136,14 +136,6 @@ const Header = () => {
           >
             Lịch hẹn
           </Link>
-          {user?.role === "ADMIN" && (
-            <Link
-              to="/admin"
-              className={`hover:text-red-600 transition whitespace-nowrap font-bold ${isActive("/admin") ? "text-red-600" : ""}`}
-            >
-              <i className="fas fa-user-shield mr-1"></i> Quản trị
-            </Link>
-          )}
         </nav>
         {/* Phải: Search & Call to Action */}
         <div className="flex items-center space-x-4 flex-shrink-0">
@@ -216,17 +208,8 @@ const Header = () => {
                   to="/profile"
                   className="block px-5 py-3 text-sm text-gray-700 hover:bg-teal-50 font-semibold"
                 >
-                  <i className="far fa-id-card mr-2 text-teal-600"></i> Hồ sơ
-                  của tôi
+                  <i className="far fa-id-card mr-2 text-teal-600"></i> Hồ sơ của tôi
                 </Link>
-                {user?.role === "ADMIN" && (
-                  <Link
-                    to="/admin"
-                    className="block px-5 py-3 text-sm text-red-600 hover:bg-red-50 font-bold"
-                  >
-                    <i className="fas fa-user-shield mr-2"></i> Trang quản trị
-                  </Link>
-                )}
 
                 {user.role === "DOCTOR" && (
                   <Link

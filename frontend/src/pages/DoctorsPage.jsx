@@ -1,15 +1,27 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+
 
 const DoctorsPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("Tất cả");
+
 
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get("search");
+    if (search) {
+      setSearchTerm(search);
+    }
+  }, [location.search]);
+
   const specialties = [
+
     "Tất cả",
     "Nội tổng quát",
     "Nhi khoa",
@@ -41,7 +53,11 @@ const DoctorsPage = () => {
   };
 
   const filteredDoctors = doctors.filter((doctor) => {
-    return doctor.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return (
+      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.specialty?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.degree?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   const handleBooking = (doctor) => {

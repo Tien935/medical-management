@@ -5,9 +5,9 @@ const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [showRecordModal, setShowRecordModal] = useState(false);
+  const [loadingRecord, setLoadingRecord] = useState(false);
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -34,6 +34,25 @@ const MyAppointments = () => {
       console.error("Error fetching appointments:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleViewRecord = async (appointmentId) => {
+    setLoadingRecord(true);
+    setShowRecordModal(true);
+    try {
+      const response = await fetch(`http://localhost:8081/api/medical-records/appointment/${appointmentId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedRecord(data);
+      } else {
+        setSelectedRecord(null);
+      }
+    } catch (error) {
+      console.error("Error fetching medical record:", error);
+      setSelectedRecord(null);
+    } finally {
+      setLoadingRecord(false);
     }
   };
 
@@ -98,6 +117,10 @@ const MyAppointments = () => {
       }
     }
   };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
 
   const filteredAppointments = appointments.filter(apt => {
     const matchesSearch = apt.doctor.toLowerCase().includes(filter.search.toLowerCase()) || apt.id.toLowerCase().includes(filter.search.toLowerCase());
@@ -186,6 +209,14 @@ const MyAppointments = () => {
                           <i className="fas fa-times"></i>
                         </button>
                       )}
+                      {(apt.rawStatus === 'COMPLETED' || apt.rawStatus === 'Đã khám') && (
+                        <button 
+                          onClick={() => handleViewRecord(apt.id)}
+                          className="px-4 py-2 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white transition font-bold text-xs uppercase tracking-wider"
+                        >
+                          Kết quả
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -200,6 +231,112 @@ const MyAppointments = () => {
           </table>
         </div>
       </div>
+
+      {/* Medical Record Modal */}
+      {showRecordModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-slideUp">
+            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <div>
+                <h3 className="text-2xl font-black text-slate-900">Kết quả khám bệnh</h3>
+                <p className="text-slate-500 font-semibold text-sm mt-1">Mã lịch hẹn: {selectedRecord?.appointment?.id}</p>
+              </div>
+              <button 
+                onClick={() => setShowRecordModal(false)}
+                className="w-12 h-12 rounded-full bg-white text-slate-400 hover:text-slate-600 shadow-sm flex items-center justify-center transition"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+            </div>
+            
+            <div className="p-8 max-h-[70vh] overflow-y-auto">
+              {loadingRecord ? (
+                <div className="py-20 text-center">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600 mx-auto mb-4"></div>
+                  <p className="text-slate-500 font-bold">Đang tải kết quả...</p>
+                </div>
+              ) : selectedRecord ? (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-2 gap-6 p-6 bg-teal-50 rounded-3xl border border-teal-100">
+                    <div>
+                      <p className="text-xs font-black text-teal-600 uppercase tracking-widest mb-1">Bác sĩ phụ trách</p>
+                      <p className="font-bold text-slate-900">{selectedRecord.doctor?.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-black text-teal-600 uppercase tracking-widest mb-1">Ngày khám</p>
+                      <p className="font-bold text-slate-900">
+                        {new Date(selectedRecord.examinationDate).toLocaleDateString('vi-VN', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <section>
+                      <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                        <i className="fas fa-stethoscope mr-2 text-teal-500"></i> Triệu chứng & Bệnh sử
+                      </h4>
+                      <p className="text-slate-700 bg-slate-50 p-5 rounded-2xl border border-slate-100 font-medium leading-relaxed">
+                        {selectedRecord.symptoms}
+                      </p>
+                    </section>
+
+                    <section>
+                      <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                        <i className="fas fa-file-medical mr-2 text-teal-500"></i> Chẩn đoán
+                      </h4>
+                      <p className="text-slate-900 bg-blue-50/50 p-5 rounded-2xl border border-blue-100 font-bold text-lg leading-relaxed">
+                        {selectedRecord.diagnosis}
+                      </p>
+                    </section>
+
+                    <section>
+                      <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                        <i className="fas fa-pills mr-2 text-teal-500"></i> Đơn thuốc & Điều trị
+                      </h4>
+                      <div className="text-slate-700 bg-amber-50/30 p-5 rounded-2xl border border-amber-100 font-medium whitespace-pre-line leading-relaxed">
+                        {selectedRecord.prescription}
+                      </div>
+                    </section>
+
+                    {selectedRecord.notes && (
+                      <section>
+                        <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center">
+                          <i className="fas fa-comment-medical mr-2 text-teal-500"></i> Ghi chú & Dặn dò
+                        </h4>
+                        <p className="text-slate-600 italic bg-slate-50 p-5 rounded-2xl border border-slate-100 font-medium leading-relaxed">
+                          {selectedRecord.notes}
+                        </p>
+                      </section>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="py-20 text-center">
+                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i className="fas fa-file-invoice text-slate-200 text-3xl"></i>
+                  </div>
+                  <p className="text-slate-500 font-bold">Chưa có kết quả chi tiết cho lịch hẹn này.</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-8 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+              <button 
+                onClick={() => setShowRecordModal(false)}
+                className="px-8 py-3 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition shadow-lg"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="mt-12 bg-teal-600 rounded-[2.5rem] p-10 text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl shadow-teal-100">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
